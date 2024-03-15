@@ -3,21 +3,19 @@ import Trash from "../icons/Trash";
 import { UrlData } from "../interfaces/UrlData";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import Toast from "./Toast";
-import { useState } from "react";
 import { ClipBoard } from "../icons/ClipBoard";
 
 interface IDataTableProps {
   data: UrlData[];
   refreshData: () => void;
+  showToast: (message: string) => void;
 }
 
 const DataTable: React.FunctionComponent<IDataTableProps> = ({
   data,
   refreshData,
+  showToast,
 }) => {
-  const [successToast, setSuccessToast] = useState<boolean>(false);
-
   const renderTableData = () => {
     if (data?.length === 0) return null;
 
@@ -71,7 +69,7 @@ const DataTable: React.FunctionComponent<IDataTableProps> = ({
 
       if (response.status === 204) {
         refreshData();
-        setSuccessToast(!successToast);
+        showToast("Short URL removed.");
       }
     } catch (error) {
       console.error("Error in method to remove!");
@@ -81,14 +79,10 @@ const DataTable: React.FunctionComponent<IDataTableProps> = ({
   const copyToClipBoard = async (shortUrl: string) => {
     try {
       await navigator.clipboard.writeText(`${SERVER_URL}/shortUrl/${shortUrl}`);
-      // TODO: ADD TOAST TO SUCCESS COPY ON CLIPBOARD
+      showToast("Short URL copied.");
     } catch (error) {
       console.error("Error on copy on clipboard!");
     }
-  };
-
-  const handleToast = () => {
-    setSuccessToast(false);
   };
 
   return (
@@ -112,7 +106,6 @@ const DataTable: React.FunctionComponent<IDataTableProps> = ({
         </thead>
         <tbody>{renderTableData()}</tbody>
       </table>
-      {successToast && <Toast onClose={() => handleToast()} />}
     </div>
   );
 };

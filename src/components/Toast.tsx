@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Success } from "../icons/Success";
 import { Close } from "../icons/Close";
 
@@ -11,12 +11,18 @@ interface IToastProps {
   onClose: () => void;
 }
 
-// TODO: RENAME COMPONENT OR MAKE REUSABLE
 const Toast: React.FunctionComponent<IToastProps> = ({
   message = DEFAULT_MESSAGE,
   type = DEFAULT_TYPE,
   onClose,
 }) => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timeout);
+  }, [onClose]);
+
   return (
     <div
       id="toast-success"
