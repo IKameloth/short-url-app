@@ -10,11 +10,12 @@ interface IContentProps {}
 
 const Content: React.FunctionComponent<IContentProps> = () => {
   const [data, setData] = useState<UrlData[]>([]);
+  const [reload, setReload] = useState<boolean>(false);
 
   const fetchTableData = async () => {
     try {
       const response = await axios.get(`${SERVER_URL}/shortUrl`);
-
+      // TODO: SET EMPTY ARRAY IN STATE
       if (response && response.data) {
         setData(response.data);
       }
@@ -23,9 +24,17 @@ const Content: React.FunctionComponent<IContentProps> = () => {
     }
   };
 
+  const handleReloadData = () => {
+    setReload(!reload);
+  };
+
   useEffect(() => {
     fetchTableData();
   }, []);
+
+  useEffect(() => {
+    fetchTableData();
+  }, [reload]);
 
   return (
     <div className="py-20 px-4 mx-auto max-w-screen-xl text-center z-10 relative">
@@ -33,8 +42,8 @@ const Content: React.FunctionComponent<IContentProps> = () => {
       <p className="mb-8 text-lg font-normal text-black lg:text-xl sm:px-16 lg:px-48">
         Enter below the URL to short
       </p>
-      <Form />
-      <DataTable data={data} />
+      <Form refreshData={handleReloadData} />
+      <DataTable data={data} refreshData={handleReloadData} />
     </div>
   );
 };

@@ -3,9 +3,11 @@ import axios from "axios";
 import { SERVER_URL } from "../constants/environments";
 import { Link } from "../icons/Link";
 
-interface IFormProps {}
+interface IFormProps {
+  refreshData: () => void;
+}
 
-const Form: React.FunctionComponent<IFormProps> = () => {
+const Form: React.FunctionComponent<IFormProps> = ({ refreshData }) => {
   const [fullUrl, setFullUrl] = useState<string>("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -14,6 +16,7 @@ const Form: React.FunctionComponent<IFormProps> = () => {
     try {
       await axios.post(`${SERVER_URL}/shortUrl`, { fullUrl });
       setFullUrl("");
+      refreshData();
     } catch (error) {
       console.error("Error on handle submit method!");
     }
