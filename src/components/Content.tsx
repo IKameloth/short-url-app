@@ -53,7 +53,7 @@ const Content: React.FunctionComponent<IContentProps> = () => {
     <div className="py-20 px-4 mx-auto max-w-screen-xl text-center z-10 relative">
       <Title />
       <p className="mb-8 text-lg font-normal text-black lg:text-xl sm:px-16 lg:px-48">
-        Enter below the URL to short
+        Paste the URL to be shortened
       </p>
       <Form refreshData={handleReloadData} />
       <DataTable
